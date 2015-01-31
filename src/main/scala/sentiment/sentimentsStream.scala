@@ -41,7 +41,7 @@ abstract class sentimentsStream {
     val context = new StreamingContext(sparkConf, Seconds(1))
 
     new StreamComputation(context).compute(getStream(context))
-      .reduceByKeyAndWindow((x: Int,y: Int) => x + y, Seconds(5), Seconds(2))
+      .reduceByKeyAndWindow((x: Int,y: Int) => x + y, (x: Int,y: Int) => x - y, Seconds(5), Seconds(2))
       .saveToCassandra("sparkstreaming", "sentimentCount")
 
     context.start()
