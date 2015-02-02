@@ -1,4 +1,4 @@
-package sentiment
+package utils
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.streaming.StreamingContext
@@ -10,20 +10,18 @@ import scala.io.Source
 /**
  * Created by noams on 1/29/15.
  */
-object QueueStream extends sentimentsStream {
+object QueueStream {
 
   // An RDD mutable queue to provide input for computation
   val rddQueue = new mutable.SynchronizedQueue[RDD[String]]
 
-  override def getAppName() = "Queue stream Sentiment Example"
-
   // Create stream out of queue
-  override def getStream(context: StreamingContext): DStream[String] = context.queueStream(rddQueue)
+  def getStream(context: StreamingContext): DStream[String] = context.queueStream(rddQueue)
 
   // Push PLines into input queue
-  override def pushData(context: StreamingContext): Unit = {
+  def pushData(context: StreamingContext, fileName: String): Unit = {
     // Read source PLines
-    def source = Source.fromURL(getClass.getResource("allPlines.txt"))
+    def source = Source.fromURL(getClass.getResource(fileName))
     def lines: Iterator[String] = source.getLines()
 
     // Split file to 100 batches
