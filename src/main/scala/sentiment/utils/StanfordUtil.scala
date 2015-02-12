@@ -50,7 +50,9 @@ class StanfordUtil() {
    * @param line - Input chat line
    * @return collection of sentence annotations
    */
-  def getSentences(line: String) = JavaConversions.asScalaBuffer(getAnnotation(line).get(classOf[CoreAnnotations.SentencesAnnotation])).toList
+  def getSentences(line: String) =
+    JavaConversions.asScalaBuffer(getAnnotation(line)
+      .get(classOf[CoreAnnotations.SentencesAnnotation])).toList
 
   /**
    * @param sentence - Input sentence

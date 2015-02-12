@@ -26,8 +26,12 @@ class StreamComputation(context: StreamingContext) extends Serializable {
    * @return stream containing sentiment to number of occurrences mapping
    */
   def compute(inputStream: DStream[String]) : DStream[(Int, Int)] = {
-    val flattenMap: DStream[CoreMap] = inputStream.flatMap(line => standfordUtil.value.getSentences(PLineUtil.getChat(line)))
-    val mappedStream = flattenMap.map(sentence => (standfordUtil.value.getSentiment(sentence), 1))
+    val flattenMap: DStream[CoreMap] =
+      inputStream.flatMap(line => standfordUtil.value.getSentences(PLineUtil.getChat(line)))
+
+    val mappedStream =
+      flattenMap.map(sentence => (standfordUtil.value.getSentiment(sentence), 1))
+
     val reducedStream = mappedStream.reduceByKey(_ + _)
 
     reducedStream
